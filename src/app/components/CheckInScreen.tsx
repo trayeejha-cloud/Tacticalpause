@@ -1,8 +1,10 @@
 import { ArrowLeft } from 'lucide-react';
+import { AboutButton } from './AboutButton';
 
 interface CheckInScreenProps {
   onFeelingSelect: (feeling: string) => void;
   onBack?: () => void;
+  onAboutClick?: () => void;
 }
 
 const feelings = [
@@ -14,19 +16,24 @@ const feelings = [
   { id: 6, text: "I just need a minute" },
 ];
 
-export function CheckInScreen({ onFeelingSelect, onBack }: CheckInScreenProps) {
+export function CheckInScreen({ onFeelingSelect, onBack, onAboutClick }: CheckInScreenProps) {
   return (
     <div className="min-h-screen flex flex-col px-6 py-12" style={{ backgroundColor: '#9AB17A' }}>
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="self-start mb-6 p-2 rounded-full transition-all duration-200 active:scale-95"
-          style={{ color: '#2F2F2F' }}
-          aria-label="Go back"
-        >
-          <ArrowLeft size={24} />
-        </button>
-      )}
+      <div className="flex justify-between items-start mb-6">
+        {onBack ? (
+          <button
+            onClick={onBack}
+            className="p-2 rounded-full transition-all duration-200 active:scale-95"
+            style={{ color: '#2F2F2F' }}
+            aria-label="Go back"
+          >
+            <ArrowLeft size={24} />
+          </button>
+        ) : (
+          <div />
+        )}
+        {onAboutClick && <AboutButton onClick={onAboutClick} />}
+      </div>
 
       <div className="flex-1 flex flex-col max-w-2xl w-full mx-auto">
         <h2 className="mb-8 text-center" style={{ color: '#2F2F2F', fontSize: '28px', fontWeight: '500', letterSpacing: '-0.02em' }}>
