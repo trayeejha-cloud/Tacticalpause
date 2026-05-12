@@ -17,8 +17,8 @@ function figmaAssetResolver() {
 }
 
 export default defineConfig({
-  
-  base: "/tacticalpause/",
+
+  base: "/Tacticalpause/",
 
   plugins: [
     figmaAssetResolver(),
