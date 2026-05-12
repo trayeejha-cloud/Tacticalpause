@@ -38,6 +38,16 @@ import { SixtySecondPauseTimer } from './components/SixtySecondPauseTimer';
 import { SixtySecondPauseReady } from './components/SixtySecondPauseReady';
 import { WhatKindOfUrge } from './components/WhatKindOfUrge';
 import { SuggestedSupportCard } from './components/SuggestedSupportCard';
+import { AboutHub } from './components/AboutHub';
+import { OriginPage } from './components/OriginPage';
+import { DesignPhilosophyPage } from './components/DesignPhilosophyPage';
+import { AboutStressedPage } from './components/AboutStressedPage';
+import { AboutFocusPage } from './components/AboutFocusPage';
+import { AboutAnxiousPage } from './components/AboutAnxiousPage';
+import { AboutCravingsPage } from './components/AboutCravingsPage';
+import { AboutExhaustedPage } from './components/AboutExhaustedPage';
+import { AboutMinutePage } from './components/AboutMinutePage';
+import { BehindTheSitePage } from './components/BehindTheSitePage';
 
 type Screen =
   | 'welcome'
@@ -79,7 +89,17 @@ type Screen =
   | 'fatigue-ready'
   | 'sixty-second-pause-intro'
   | 'sixty-second-pause-timer'
-  | 'sixty-second-pause-ready';
+  | 'sixty-second-pause-ready'
+  | 'about-hub'
+  | 'about-origin'
+  | 'about-design-philosophy'
+  | 'about-stressed'
+  | 'about-focus'
+  | 'about-anxious'
+  | 'about-cravings'
+  | 'about-exhausted'
+  | 'about-minute'
+  | 'about-behind-site';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
@@ -132,10 +152,10 @@ export default function App() {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'welcome':
-        return <WelcomeScreen onPauseClick={() => navigateTo('checkin')} />;
+        return <WelcomeScreen onPauseClick={() => navigateTo('checkin')} onAboutClick={() => navigateTo('about-hub')} />;
 
       case 'checkin':
-        return <CheckInScreen onFeelingSelect={handleFeelingSelect} onBack={goBack} />;
+        return <CheckInScreen onFeelingSelect={handleFeelingSelect} onBack={goBack} onAboutClick={() => navigateTo('about-hub')} />;
 
       case 'post-call-intro':
         return (
@@ -143,6 +163,7 @@ export default function App() {
             onSafe={() => navigateTo('emotion-selection')}
             onNeedHelp={() => navigateTo('get-support')}
             onBack={goBack}
+            onAboutClick={() => navigateTo('about-hub')}
           />
         );
 
@@ -207,6 +228,7 @@ export default function App() {
             onStartReset={() => navigateTo('focus-reset')}
             onSkipToCheck={() => navigateTo('focus-check')}
             onBack={goBack}
+            onAboutClick={() => navigateTo('about-hub')}
           />
         );
 
@@ -242,6 +264,7 @@ export default function App() {
             onStartReset={() => navigateTo('breathing-timer')}
             onChooseAnother={resetToCheckIn}
             onBack={goBack}
+            onAboutClick={() => navigateTo('about-hub')}
           />
         );
 
@@ -292,6 +315,7 @@ export default function App() {
             onStartCheck={() => navigateTo('what-are-you-craving')}
             onReturnToCheckIn={resetToCheckIn}
             onBack={goBack}
+            onAboutClick={() => navigateTo('about-hub')}
           />
         );
 
@@ -403,6 +427,7 @@ export default function App() {
             onStartCheck={() => navigateTo('quick-fatigue-rating')}
             onReturnToCheckIn={resetToCheckIn}
             onBack={goBack}
+            onAboutClick={() => navigateTo('about-hub')}
           />
         );
 
@@ -492,6 +517,7 @@ export default function App() {
             onStartPause={() => navigateTo('sixty-second-pause-timer')}
             onReturnToCheckIn={resetToCheckIn}
             onBack={goBack}
+            onAboutClick={() => navigateTo('about-hub')}
           />
         );
 
@@ -513,8 +539,88 @@ export default function App() {
           />
         );
 
+      case 'about-hub':
+        return (
+          <AboutHub
+            onNavigateToPage={(page) => navigateTo(`about-${page}` as Screen)}
+            onBack={goBack}
+          />
+        );
+
+      case 'about-origin':
+        return (
+          <OriginPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-design-philosophy':
+        return (
+          <DesignPhilosophyPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-stressed':
+        return (
+          <AboutStressedPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-focus':
+        return (
+          <AboutFocusPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-anxious':
+        return (
+          <AboutAnxiousPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-cravings':
+        return (
+          <AboutCravingsPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-exhausted':
+        return (
+          <AboutExhaustedPage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-minute':
+        return (
+          <AboutMinutePage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
+      case 'about-behind-site':
+        return (
+          <BehindTheSitePage
+            onBack={() => navigateTo('about-hub')}
+            onReturnToCheckIn={resetToCheckIn}
+          />
+        );
+
       default:
-        return <WelcomeScreen onPauseClick={() => navigateTo('checkin')} />;
+        return <WelcomeScreen onPauseClick={() => navigateTo('checkin')} onAboutClick={() => navigateTo('about-hub')} />;
     }
   };
 

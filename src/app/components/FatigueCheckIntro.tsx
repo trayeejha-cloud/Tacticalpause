@@ -1,22 +1,27 @@
 import { ArrowLeft, Moon, Grid } from 'lucide-react';
+import { AboutButton } from './AboutButton';
 
 interface FatigueCheckIntroProps {
   onStartCheck: () => void;
   onReturnToCheckIn: () => void;
   onBack: () => void;
+  onAboutClick?: () => void;
 }
 
-export function FatigueCheckIntro({ onStartCheck, onReturnToCheckIn, onBack }: FatigueCheckIntroProps) {
+export function FatigueCheckIntro({ onStartCheck, onReturnToCheckIn, onBack, onAboutClick }: FatigueCheckIntroProps) {
   return (
     <div className="min-h-screen flex flex-col px-6 py-12" style={{ backgroundColor: '#9AB17A' }}>
-      <button
-        onClick={onBack}
-        className="self-start mb-6 p-2 rounded-full transition-all duration-200 active:scale-95"
-        style={{ color: '#2F2F2F' }}
-        aria-label="Go back"
-      >
-        <ArrowLeft size={24} />
-      </button>
+      <div className="flex justify-between items-start mb-6">
+        <button
+          onClick={onBack}
+          className="p-2 rounded-full transition-all duration-200 active:scale-95"
+          style={{ color: '#2F2F2F' }}
+          aria-label="Go back"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        {onAboutClick && <AboutButton onClick={onAboutClick} />}
+      </div>
 
       <div className="flex-1 flex flex-col max-w-2xl w-full mx-auto justify-center">
         <div
