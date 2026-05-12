@@ -29,12 +29,15 @@ import { FatigueCheckIntro } from './components/FatigueCheckIntro';
 import { QuickFatigueRating } from './components/QuickFatigueRating';
 import { HighFatigueSupport } from './components/HighFatigueSupport';
 import { BodyNeedsCheck } from './components/BodyNeedsCheck';
+import { BodyNeedSupportCard } from './components/BodyNeedSupportCard';
 import { MicroRecoveryReset } from './components/MicroRecoveryReset';
 import { ChooseSmallSupport } from './components/ChooseSmallSupport';
 import { FatigueReadyScreen } from './components/FatigueReadyScreen';
 import { SixtySecondPauseIntro } from './components/SixtySecondPauseIntro';
 import { SixtySecondPauseTimer } from './components/SixtySecondPauseTimer';
 import { SixtySecondPauseReady } from './components/SixtySecondPauseReady';
+import { WhatKindOfUrge } from './components/WhatKindOfUrge';
+import { SuggestedSupportCard } from './components/SuggestedSupportCard';
 
 type Screen =
   | 'welcome'
@@ -57,7 +60,9 @@ type Screen =
   | 'still-feeling-it'
   | 'craving-support-intro'
   | 'what-are-you-craving'
+  | 'what-kind-of-urge'
   | 'rate-the-urge'
+  | 'suggested-support-card'
   | 'choose-support-tool'
   | 'ride-urge-wave'
   | 'move-urge'
@@ -68,6 +73,7 @@ type Screen =
   | 'quick-fatigue-rating'
   | 'high-fatigue-support'
   | 'body-needs-check'
+  | 'body-need-support-card'
   | 'micro-recovery-reset'
   | 'choose-small-support'
   | 'fatigue-ready'
@@ -79,6 +85,8 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
   const [screenHistory, setScreenHistory] = useState<Screen[]>(['welcome']);
   const [initialUrgeRating, setInitialUrgeRating] = useState<number>(5);
+  const [selectedBodyNeed, setSelectedBodyNeed] = useState<string>('not-sure');
+  const [selectedUrgeType, setSelectedUrgeType] = useState<string>('not-sure');
 
   const navigateTo = (screen: Screen) => {
     setScreenHistory([...screenHistory, screen]);
@@ -290,7 +298,18 @@ export default function App() {
       case 'what-are-you-craving':
         return (
           <WhatAreYouCraving
-            onCravingSelect={() => navigateTo('rate-the-urge')}
+            onCravingSelect={() => navigateTo('what-kind-of-urge')}
+            onBack={goBack}
+          />
+        );
+
+      case 'what-kind-of-urge':
+        return (
+          <WhatKindOfUrge
+            onUrgeTypeSelect={(urgeType) => {
+              setSelectedUrgeType(urgeType);
+              navigateTo('rate-the-urge');
+            }}
             onBack={goBack}
           />
         );
@@ -300,8 +319,22 @@ export default function App() {
           <RateTheUrge
             onContinue={(rating) => {
               setInitialUrgeRating(rating);
-              navigateTo('choose-support-tool');
+              navigateTo('suggested-support-card');
             }}
+            onBack={goBack}
+          />
+        );
+
+      case 'suggested-support-card':
+        return (
+          <SuggestedSupportCard
+            urgeType={selectedUrgeType}
+            onRideWave={() => navigateTo('ride-urge-wave')}
+            onMove={() => navigateTo('move-urge')}
+            onBreathing={() => navigateTo('breathing-timer')}
+            onDistract={() => navigateTo('distract-me')}
+            onPeerSupport={() => navigateTo('peer-support')}
+            onContinueToOptions={() => navigateTo('choose-support-tool')}
             onBack={goBack}
           />
         );
@@ -400,7 +433,22 @@ export default function App() {
       case 'body-needs-check':
         return (
           <BodyNeedsCheck
-            onNeedSelect={() => navigateTo('micro-recovery-reset')}
+            onNeedSelect={(need) => {
+              setSelectedBodyNeed(need);
+              navigateTo('body-need-support-card');
+            }}
+            onBack={goBack}
+          />
+        );
+
+      case 'body-need-support-card':
+        return (
+          <BodyNeedSupportCard
+            need={selectedBodyNeed}
+            onTryReset={() => navigateTo('micro-recovery-reset')}
+            onChooseAnother={() => navigateTo('body-needs-check')}
+            onReturnToCheckIn={resetToCheckIn}
+            onReturnToService={resetToWelcome}
             onBack={goBack}
           />
         );
@@ -408,7 +456,7 @@ export default function App() {
       case 'micro-recovery-reset':
         return (
           <MicroRecoveryReset
-            onComplete={() => navigateTo('choose-small-support')}
+            onComplete={() => navigateTo('fatigue-ready')}
             onBack={goBack}
           />
         );
@@ -432,6 +480,7 @@ export default function App() {
           <FatigueReadyScreen
             onReturnToService={resetToWelcome}
             onReturnToCheckIn={resetToCheckIn}
+            onChooseAnotherSupport={() => navigateTo('body-needs-check')}
             onRepeatReset={() => navigateTo('micro-recovery-reset')}
             onBack={goBack}
           />
